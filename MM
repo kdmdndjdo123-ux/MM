@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة MM التعليمية</title>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+    <style>
+        :root {
+            --bg-main: #0b111e;
+            --bg-card: #151f32;
+            --primary: #00d2ff;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background-color: var(--bg-main);
+            padding: 20px;
+            position: relative;
+        }
+
+        /* شاشة التفعيل */
+        #activation-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 85vh;
+            text-align: center;
+        }
+
+        .logo-box {
+            width: 85px;
+            height: 85px;
+            background: linear-gradient(135deg, var(--primary), #0072ff);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.3);
+            margin-bottom: 20px;
+        }
+
+        h1 { font-size: 26px; margin-bottom: 8px; font-weight: 700; }
+        .subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 35px; }
+
+        .input-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid #233554;
+            background-color: var(--bg-card);
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(0, 210, 255, 0.25);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            background-color: var(--primary);
+            color: #0b111e;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .insta-section {
+            margin-top: 50px;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: rgba(21, 31, 50, 0.5);
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #1e2d4a;
+        }
+
+        .insta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 10px 24px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(220, 39, 67, 0.3);
+        }
+
+        /* شاشة الكورسات الرئيسية */
+        #dashboard-screen { display: none; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #1e2d4a;
+            padding-bottom: 15px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: 1px solid #233554;
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .logout-btn:hover { border-color: #dc2743; color: #dc2743; }
+
+        .tabs-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+
+        .tab {
+            padding: 10px 18px;
+            background-color: var(--bg-card);
+            border: 1px solid #233554;
+            border-radius: 25px;
+            white-space: nowrap;
+            font-size: 13px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            background-color: rgba(0, 210, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .course-info {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border: 1px solid #1e2d4a;
+        }
+
+        .course-title { font-size: 18px; margin-bottom: 6px; color: #ffffff; }
+        .course-desc { color: var(--text-muted); font-size: 13px; line-height: 1.5; }
+
+        .player-wrapper {
+            width: 100%;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: #000000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            margin-bottom: 25px;
+            aspect-ratio: 16/9;
+            border: 1px solid #233554;
+        }
+
+        video { width: 100%; height: 100%; object-fit: cover; }
+
+        .playlist-title {
+            font-size: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+
+        .lessons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .lesson-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background-color: var(--bg-card);
+            border-radius: 14px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: 0.2s;
+        }
+
+        .lesson-item:hover, .lesson-item.active {
+            border-color: var(--primary);
+            background-color: rgba(0, 210, 255, 0.05);
+        }
+
+        .lesson-info { display: flex; align-items: center; gap: 12px; }
+        .lesson-num {
+            width: 26px;
+            height: 26px;
+            background-color: #233554;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        .lesson-name { font-size: 14px; color: #ffffff; }
+        .lesson-duration { font-size: 12px; color: var(--text-muted); background: #1e2d4a; padding: 4px 10px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <div id="activation-screen">
+            <div class="logo-box">MM</div>
+            <h1>منصة MM التعليمية</h1>
+            <p class="subtitle">تصفح أقوى الكورسات الاحترافية في مكان واحد</p>
+            
+            <div class="input-group">
+                <input type="text" id="activation-code" placeholder="أدخل كود الاشتراك للتفعيل">
+            </div>
+            <button class="btn-primary" onclick="validateCode()">تفعيل الحساب الآن</button>
+            
+            <div class="insta-section">
+                <p>للحصول على كود التفعيل الفوري، يرجى مراسلتنا عبر حساب الإنستغرام:</p>
+                <a href="https://instagram.com/uv_d0" target="_blank" class="insta-btn">
+                    <i data-lucide="instagram"></i> @uv_d0
+                </a>
+            </div>
+        </div>
+
+        <div id="dashboard-screen">
+            <div class="header">
+                <h2>منصة MM التعليمية</h2>
+                <button class="logout-btn" onclick="logout()">خروج</button>
+            </div>
+
+            <div class="tabs-container">
+                <div class="tab active" onclick="switchCategory('sports', this)">🏋️ كورس الرياضة</div>
+                <div class="tab" onclick="switchCategory('coding', this)">💻 كورس البرمجة</div>
+                <div class="tab" onclick="switchCategory('business', this)">📈 كورس التجارة</div>
+                <div class="tab" onclick="switchCategory('design', this)">🎨 كورس التصميم</div>
+            </div>
+
+            <div class="course-info">
+                <h3 class="course-title" id="course-title">تحميل الكورس...</h3>
+                <p class="course-desc" id="course-desc">يرجى الانتظار...</p>
+            </div>
+
+            <div class="player-wrapper">
+                <video id="video-player" controls autoplay muted playsinline></video>
+            </div>
+
+            <div class="playlist-title">
+                <i data-lucide="play-circle" style="color: var(--primary); width:20px;"></i>
+                <span>الدروس المتاحة بداخل الكورس</span>
+            </div>
+            <div class="lessons-list" id="lessons-list"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // تهيئة الأيقونات
+        lucide.createIcons();
+
+        // مكتبة الفيديوهات الاحترافية والحقيقية لكل قسم
+        const coursesData = {
+            sports: {
+                title: "كورس الرياضة واللياقة البدنية المتكامل",
+                desc: "تمارين قوية مخصصة لبناء الكتل العضلية، وتحسين اللياقة البدنية الشاملة، وتقنيات التمدد الصحيح.",
+                videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+                lessons: ["مقدمة في بناء الجسم النحيف", "أسرار تمارين اللياقة وحرق الدهون", "الجدول الغذائي والتدريبي الصحيح"]
+            },
+            coding: {
+                title: "كورس البرمجة وتطوير المواقع الإلكترونية",
+                desc: "ابدأ رحلتك البرمجية من الصفر. تعلم لغات الويب الأساسية وكيف تبرمج أول موقع تفاعلي خاص بك.",
+                videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+                lessons: ["كيف يعمل الويب؟ (مقدمة شاملة)", "بناء هيكل المواقع باستخدام HTML", "إضافة لمسات سحرية وألوان بـ CSS"]
+            },
+            business: {
+                title: "كورس التجارة الإلكترونية وإدارة الأعمال",
+                desc: "خطوات مدروسة لإطلاق متجرك الإلكتروني بنجاح، واختيار المنتجات الأكثر طلباً في السوق العربي.",
+                videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+                lessons: ["أساسيات التجارة الإلكترونية المربحة", "طريقة تحليل المنتجات المنافسة بالسوق", "كيف تنشئ حملة إعلانية ممولة ناجحة"]
+            },
+            design: {
+                title: "كورس التصميم الجرافيكي والمونتاج الحديث",
+                desc: "تعلم صناعة الهويات البصرية والشعارات، واكتشف أسرار المونتاج السريع وتعديل الفيديوهات باحترافية.",
+                videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+                lessons: ["قواعد اختيار الألوان والخطوط بالتصميم", "مقدمة عملية في واجهة برامج التعديل", "كيفية دمج الصوت والمؤثرات السينمائية"]
+            }
+        };
+
+        // قائمة أكواد التفعيل المعتمدة للمنصة
+        const validCodes = ['MM-TRIAL', 'MM-MONTH1', 'MM-MONTH3', 'MM-YEAR'];
+
+        function validateCode() {
+            const inputCode = document.getElementById('activation-code').value.trim();
+            if (validCodes.includes(inputCode)) {
+                document.getElementById('activation-screen').style.display = 'none';
+                document.getElementById('dashboard-screen').style.display = 'block';
+                loadCategory('sports');
+            } else {
+                alert("كود التفعيل المدخل غير صحيح! يرجى التحقق منه أو التواصل مع الدعم.");
+            }
+        }
+
+        function loadCategory(key) {
+            const data = coursesData[key];
+            document.getElementById('course-title').innerText = data.title;
+            document.getElementById('course-desc').innerText = data.desc;
+
+            const listContainer = document.getElementById('lessons-list');
+            listContainer.innerHTML = '';
+
+            data.lessons.forEach((lessonName, index) => {
+                const item = document.createElement('div');
+                item.className = `lesson-item ${index === 0 ? 'active' : ''}`;
+                item.onclick = function() {
+                    document.querySelectorAll('.lesson-item').forEach(el => el.classList.remove('active'));
+                    item.classList.add('active');
+                    playVideo(data.videoUrl);
+                };
+                item.innerHTML = `
+                    <div class="lesson-info">
+                        <div class="lesson-num">${index + 1}</div>
+                        <div class="lesson-name">${lessonName}</div>
+                    </div>
+                    <div class="lesson-duration">فيديو HD</div>
+                `;
+                listContainer.appendChild(item);
+            });
+            playVideo(data.videoUrl);
+        }
+
+        function playVideo(url) {
+            const player = document.getElementById('video-player');
+            player.src = url;
+            player.muted = true; // كتم افتراضي إجباري لتفادي حظر الشاشة السوداء في متصفحات الموبايل
+            player.load();
+            player.play().catch(err => console.log("تحميل يدوي آمن"));
+        }
+
+        function switchCategory(key, element) {
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            loadCategory(key);
+        }
+
+        function logout() {
+            document.getElementById('activation-code').value = '';
+            document.getElementById('dashboard-screen').style.display = 'none';
+            document.getElementById('activation-screen').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
+
